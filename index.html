@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name Drawing App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #names-list {
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+    }
+    #names-list li {
+      padding: 5px 0;
+    }
+    .button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      color: green;
+      margin-top: 20px;
+    }
+    #draw-area {
+      font-size: 20px;
+      margin-top: 30px;
+      font-weight: bold;
+      color: blue;
+    }
+    #add-name-input {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Name Drawing App</h1>
+  
+  <!-- Add Name Section -->
+  <div>
+    <input type="text" id="add-name-input" placeholder="Enter a name">
+    <button class="button" id="add-name-button">Add Name</button>
+  </div>
+
+  <!-- Display the list of names -->
+  <ul id="names-list"></ul>
+
+  <!-- Button to draw a name -->
+  <button class="button" id="draw-button">Draw Name</button>
+
+  <!-- Display the result -->
+  <div id="draw-area">
+    <p id="result"></p>
+  </div>
+
+  <h3>Drawn Names:</h3>
+<ul id="drawn-names-list"></ul>
+
+  <script src="app.js"></script>
+</body>
+</html>
