@@ -1,26 +1,60 @@
-// Initialize two arrays for undrawn and drawn names
+window.onload = () => {
+  try {
+    const currentGame = localStorage.getItem('namedraw');
+    if (!currentGame) {
+      localStorage.setItem('namedraw', '[undrawn][drawn]');
+    } else {
+      setupGame();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 let undrawnNames = [];
 let drawnNames = [];
 
-// Function to update the names list (undrawn names)
+function setupGame() {
+  const names = localStorage.getItem('namedraw');
+  const regex = /\[(undrawn|drawn)\]/g;
+  const twoArrays = names.split(regex);
+  
+  undrawnNames = twoArrays[2].split(',');
+  drawnNames = twoArrays[4].split(',');
+
+  updateDrawnNamesList();
+  updateNamesList();
+}
+
+function updateLocalStorage() {
+  localStorage.setItem('namedraw', `[undrawn]${undrawnNames.toString()}[drawn]${drawnNames.toString()}`)
+}
+
+
 function updateNamesList() {
   const undrawnNamesListElement = document.getElementById('names-list');
-  undrawnNamesListElement.innerHTML = ''; // Clear the list
+  if (!undrawnNamesListElement) {
+    console.error('cannot find names-list in DOM')
+    return;
+  }
+  undrawnNamesListElement.innerHTML = '';
 
-  // Add each undrawn name as a list item
   undrawnNames.forEach((name, index) => {
     const li = document.createElement('li');
     li.textContent = `${index + 1}. ${name}`;
     undrawnNamesListElement.appendChild(li);
   });
+
+  updateLocalStorage();
 }
 
-// Function to update the drawn names list
 function updateDrawnNamesList() {
   const drawnNamesListElement = document.getElementById('drawn-names-list');
-  drawnNamesListElement.innerHTML = ''; // Clear the list
+  if (!drawnNamesListElement) {
+    console.error('cannot find names-list in DOM')
+    return;
+  }
+  drawnNamesListElement.innerHTML = '';
 
-  // Add each drawn name as a list item
   drawnNames.forEach((name, index) => {
     const li = document.createElement('li');
     li.textContent = `${index + 1}. ${name}`;
@@ -28,31 +62,25 @@ function updateDrawnNamesList() {
   });
 }
 
-// Function to draw a name randomly from the undrawn names
 function drawName() {
   if (undrawnNames.length === 0) {
     alert("No undrawn names available!");
     return;
   }
   
-  // Get a random index
   const randomIndex = Math.floor(Math.random() * undrawnNames.length);
   const drawnName = undrawnNames[randomIndex];
 
-  // Move the name from undrawn to drawn
-  undrawnNames.splice(randomIndex, 1); // Remove the name from the undrawn array
-  drawnNames.push(drawnName); // Add the name to the drawn array
+  undrawnNames.splice(randomIndex, 1);
+  drawnNames.push(drawnName);
 
-  // Update the lists in the UI
   updateNamesList();
   updateDrawnNamesList();
 
-  // Display the drawn name
   const resultElement = document.getElementById('result');
   resultElement.textContent = `🎉 The winner is: ${drawnName}`;
 }
 
-// Function to add a name to the undrawn names list
 function addName() {
   const nameInput = document.getElementById('add-name-input');
   const name = nameInput.value.trim();
@@ -62,11 +90,10 @@ function addName() {
     return;
   }
 
-  undrawnNames.push(name); // Add the name to the undrawn names array
-  nameInput.value = ''; // Clear the input field
-  updateNamesList(); // Update the undrawn names list UI
+  undrawnNames.push(name);
+  nameInput.value = '';
+  updateNamesList();
 }
 
-// Event listeners for buttons
 document.getElementById('add-name-button').addEventListener('click', addName);
 document.getElementById('draw-button').addEventListener('click', drawName);
