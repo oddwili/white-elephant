@@ -106,6 +106,7 @@ const WhiteElephant = (function () {
     drawnNames = [];
     expires = null;
     undrawnNamesListElement.innerHTML = '';
+    drawnNamesListElement.innerHTML = '';
     updateLocalStorage(); // TODO: BUG - never creates a new game
   }
 
