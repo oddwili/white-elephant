@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "http-server": "^14.1.1"
+  },
+  "name": "white-elephant",
+  "version": "1.0.0",
+  "description": "A simple name drawing app for white elephant Christmas games.",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack && cp src/index.html dist/ && cp src/style.css dist/ && cp src/favicon.ico dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "source-map-loader": "^5.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.2",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  }
+}
