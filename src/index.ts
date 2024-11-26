@@ -13,7 +13,7 @@ const WhiteElephant = (function () {
 
     if (!game) {
       updateLocalStorage();
-    } else if (new Date().getTime() > game.expires) {
+    } else if (new Date().getTime() > JSON.parse(game).expires) {
       clearCurrentGame();
     } else {
       const currentGame = JSON.parse(game);
@@ -25,6 +25,9 @@ const WhiteElephant = (function () {
     document.getElementById('add-name-button').addEventListener('click', WhiteElephant.addName);
     document.getElementById('draw-button').addEventListener('click', WhiteElephant.drawName);
     document.getElementById('clear-button').addEventListener('click', WhiteElephant.clearCurrentGame);
+    
+    updateUndrawnNamesList();
+    updateDrawnNamesList();
   }
   
   function updateLocalStorage() {
@@ -87,7 +90,7 @@ const WhiteElephant = (function () {
   }
   
   function addName() {
-    const nameInput = document.getElementById('add-name-input');
+    const nameInput = document.getElementById('add-name-input') as HTMLInputElement;
     const name = nameInput.value.trim();
   
     if (name === '') {
@@ -107,7 +110,7 @@ const WhiteElephant = (function () {
     expires = null;
     undrawnNamesListElement.innerHTML = '';
     drawnNamesListElement.innerHTML = '';
-    updateLocalStorage(); // TODO: BUG - never creates a new game
+    updateLocalStorage();
   }
 
   return {
