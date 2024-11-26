@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name Drawing App</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <h1>Name Drawing App</h1>
+
+  <div>
+    <input type="text" id="add-name-input" placeholder="Enter a name">
+    <button class="button" id="add-name-button">Add Name</button>
+  </div>
+  <h3>Undrawn Names:</h3>
+  <ul id="names-list"></ul>
+
+  <button class="button" id="draw-button">Draw Name</button>
+
+  <div id="draw-area">
+    <p id="result"></p>
+  </div>
+
+  <h3>Drawn Names:</h3>
+  <ul id="drawn-names-list"></ul>
+
+  <button class="button" id="clear-button">Clear Current Game</button>
+
+  <script src="./bundle.js"></script>
+</body>
+</html>
