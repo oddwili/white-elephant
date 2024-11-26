@@ -5,8 +5,8 @@ const WhiteElephant = (function () {
   let undrawnNames = [];
   let drawnNames = [];
   let expires = null;
-  const undrawnNamesListElement = document.getElementById('names-list');
-  const drawnNamesListElement = document.getElementById('drawn-names-list');
+  let undrawnNamesListElement;
+  let drawnNamesListElement;
   
   function setupGame() {
     const game = localStorage.getItem(localStorageKey);
@@ -22,9 +22,12 @@ const WhiteElephant = (function () {
       expires = currentGame.expires;
     }
 
-    document.getElementById('add-name-button').addEventListener('click', WhiteElephant.addName);
-    document.getElementById('draw-button').addEventListener('click', WhiteElephant.drawName);
-    document.getElementById('clear-button').addEventListener('click', WhiteElephant.clearCurrentGame);
+    document.getElementById('add-name-button').addEventListener('click', addName);
+    document.getElementById('draw-button').addEventListener('click', drawName);
+    document.getElementById('clear-button').addEventListener('click', clearCurrentGame);
+
+    undrawnNamesListElement = document.getElementById('names-list');
+    drawnNamesListElement = document.getElementById('drawn-names-list');
     
     updateUndrawnNamesList();
     updateDrawnNamesList();
@@ -46,13 +49,7 @@ const WhiteElephant = (function () {
       return;
     }
     undrawnNamesListElement.innerHTML = '';
-  
-    undrawnNames.forEach((name, index) => {
-      const li = document.createElement('li');
-      li.textContent = `${index + 1}. ${name}`;
-      undrawnNamesListElement.appendChild(li);
-    });
-  
+    undrawnNamesListElement.appendChild(generateNameListItem(undrawnNames));
     updateLocalStorage();
   }
   
@@ -62,12 +59,25 @@ const WhiteElephant = (function () {
       return;
     }
     drawnNamesListElement.innerHTML = '';
-  
-    drawnNames.forEach((name, index) => {
+    drawnNamesListElement.appendChild(generateNameListItem(drawnNames));
+    updateLocalStorage();
+  }
+
+  function generateNameListItem(names) {
+    const namesWrapper = document.createElement('div');
+    names.forEach((name, index) => {
       const li = document.createElement('li');
       li.textContent = `${index + 1}. ${name}`;
-      drawnNamesListElement.appendChild(li);
+      const editButton = document.createElement('button');
+      editButton.textContent = 'edit';
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'delete';
+      li.appendChild(editButton);
+      li.appendChild(deleteButton);
+      namesWrapper.appendChild(li);
     });
+
+    return namesWrapper;
   }
   
   function drawName() {
