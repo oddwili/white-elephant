@@ -2,11 +2,11 @@ const WhiteElephant = (function () {
   'use strict';
 
   const localStorageKey = 'namedraw';
-  let undrawnNames = [];
-  let drawnNames = [];
-  let expires = null;
-  const undrawnNamesListElement = document.getElementById('names-list');
-  const drawnNamesListElement = document.getElementById('drawn-names-list');
+  let undrawnNames: string[] = [];
+  let drawnNames: string[] = [];
+  let expires: Date | null = null;
+  let undrawnNamesListElement;
+  let drawnNamesListElement;
   
   function setupGame() {
     const game = localStorage.getItem(localStorageKey);
@@ -22,9 +22,12 @@ const WhiteElephant = (function () {
       expires = currentGame.expires;
     }
 
-    document.getElementById('add-name-button').addEventListener('click', WhiteElephant.addName);
-    document.getElementById('draw-button').addEventListener('click', WhiteElephant.drawName);
-    document.getElementById('clear-button').addEventListener('click', WhiteElephant.clearCurrentGame);
+    document.getElementById('add-name-button').addEventListener('click', addName);
+    document.getElementById('draw-button').addEventListener('click', drawName);
+    document.getElementById('clear-button').addEventListener('click', clearCurrentGame);
+
+    undrawnNamesListElement = document.getElementById('undrawn-names-list');
+    drawnNamesListElement = document.getElementById('drawn-names-list');
     
     updateUndrawnNamesList();
     updateDrawnNamesList();
@@ -46,13 +49,7 @@ const WhiteElephant = (function () {
       return;
     }
     undrawnNamesListElement.innerHTML = '';
-  
-    undrawnNames.forEach((name, index) => {
-      const li = document.createElement('li');
-      li.textContent = `${index + 1}. ${name}`;
-      undrawnNamesListElement.appendChild(li);
-    });
-  
+    generateNameListItem(undrawnNames, undrawnNamesListElement);
     updateLocalStorage();
   }
   
@@ -62,12 +59,93 @@ const WhiteElephant = (function () {
       return;
     }
     drawnNamesListElement.innerHTML = '';
-  
-    drawnNames.forEach((name, index) => {
+    generateNameListItem(drawnNames, drawnNamesListElement);
+    updateLocalStorage();
+  }
+
+  function generateNameListItem(names, listElement) {
+    names.forEach((name, index) => {
       const li = document.createElement('li');
-      li.textContent = `${index + 1}. ${name}`;
-      drawnNamesListElement.appendChild(li);
+      const text = document.createElement('p');
+      text.textContent = name;
+      const editButton = document.createElement('button');
+      editButton.addEventListener('click', editName);
+      editButton.textContent = 'edit';
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'delete';
+      deleteButton.addEventListener('click', deleteName);
+      li.appendChild(editButton);
+      li.appendChild(text);
+      li.appendChild(deleteButton);
+      listElement.appendChild(li);
     });
+  }
+
+  function editName(event: MouseEvent) {
+    const editButton = event.target as HTMLButtonElement;
+    const itemNode = editButton.parentNode;
+    const listNode = itemNode.parentElement;
+    const isUndrawnList = listNode.id.includes('undrawn');
+    const foundNameEl = Object.values(itemNode.children).find((child) => child.tagName === "P");
+    const foundName = foundNameEl.textContent;
+
+    let namesArray = isUndrawnList ? undrawnNames : drawnNames;
+    const editInputElement = document.createElement('input');
+    editInputElement.setAttribute('type', 'text');
+    editInputElement.setAttribute('value', foundName);
+    itemNode.appendChild(editInputElement);
+    const editSaveButton = document.createElement('button');
+    editSaveButton.textContent = 'Save Edit';
+    const cancelEditButton = document.createElement('button');
+    cancelEditButton.textContent = 'Cancel Edit';
+
+    function saveAndCloseEdits() {
+      const newNameValue = editInputElement.value.trim();
+
+      if(newNameValue === '') {
+        console.error('New name value is empty');
+        return;
+      }
+      const nameToUpdateIndex = namesArray.findIndex((name) => name  === foundName);
+      namesArray.splice(nameToUpdateIndex, 1, newNameValue);
+      closeEditing();
+    
+      if (isUndrawnList) {
+        updateUndrawnNamesList();
+      } else {
+        updateDrawnNamesList();
+      }
+    }
+
+    function closeEditing() {
+      itemNode.removeChild(editInputElement);
+      itemNode.removeChild(editSaveButton);
+      itemNode.removeChild(cancelEditButton);
+    }
+
+    editSaveButton.addEventListener('click', saveAndCloseEdits);
+    cancelEditButton.addEventListener('click', closeEditing);
+    itemNode.appendChild(editSaveButton);
+    itemNode.appendChild(cancelEditButton);
+  }
+
+  function deleteName(event: MouseEvent) {
+    const deleteButton = event.target as HTMLButtonElement;
+    const itemNode = deleteButton.parentNode;
+    const listNode = itemNode.parentElement;
+    const isUndrawnList = listNode.id.includes('undrawn');
+    const foundNameEl = Object.values(itemNode.children).find((child) => child.tagName === "P");
+    const foundName = foundNameEl.textContent;
+
+    let namesArray = isUndrawnList ? undrawnNames : drawnNames;
+    const nameToDeleteIndex = namesArray.findIndex((name) => name === foundName);
+    namesArray.splice(nameToDeleteIndex, 1);
+    
+    if (isUndrawnList) {
+      updateUndrawnNamesList();
+    } else {
+      updateDrawnNamesList();
+    }
   }
   
   function drawName() {
