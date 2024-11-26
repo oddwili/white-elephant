@@ -2,9 +2,9 @@ const WhiteElephant = (function () {
   'use strict';
 
   const localStorageKey = 'namedraw';
-  let undrawnNames = [];
-  let drawnNames = [];
-  let expires = null;
+  let undrawnNames: string[] = [];
+  let drawnNames: string[] = [];
+  let expires: Date | null = null;
   let undrawnNamesListElement;
   let drawnNamesListElement;
   
@@ -26,7 +26,7 @@ const WhiteElephant = (function () {
     document.getElementById('draw-button').addEventListener('click', drawName);
     document.getElementById('clear-button').addEventListener('click', clearCurrentGame);
 
-    undrawnNamesListElement = document.getElementById('names-list');
+    undrawnNamesListElement = document.getElementById('undrawn-names-list');
     drawnNamesListElement = document.getElementById('drawn-names-list');
     
     updateUndrawnNamesList();
@@ -49,7 +49,7 @@ const WhiteElephant = (function () {
       return;
     }
     undrawnNamesListElement.innerHTML = '';
-    undrawnNamesListElement.appendChild(generateNameListItem(undrawnNames));
+    generateNameListItem(undrawnNames, undrawnNamesListElement);
     updateLocalStorage();
   }
   
@@ -59,25 +59,50 @@ const WhiteElephant = (function () {
       return;
     }
     drawnNamesListElement.innerHTML = '';
-    drawnNamesListElement.appendChild(generateNameListItem(drawnNames));
+    generateNameListItem(drawnNames, drawnNamesListElement);
     updateLocalStorage();
   }
 
-  function generateNameListItem(names) {
-    const namesWrapper = document.createElement('div');
+  function generateNameListItem(names, listElement) {
     names.forEach((name, index) => {
       const li = document.createElement('li');
-      li.textContent = `${index + 1}. ${name}`;
+      const text = document.createElement('p');
+      text.textContent = name;
       const editButton = document.createElement('button');
+      editButton.addEventListener('click', editName);
       editButton.textContent = 'edit';
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'delete';
+      deleteButton.addEventListener('click', deleteName);
       li.appendChild(editButton);
+      li.appendChild(text);
       li.appendChild(deleteButton);
-      namesWrapper.appendChild(li);
+      listElement.appendChild(li);
     });
+  }
 
-    return namesWrapper;
+  function editName(event: MouseEvent) {
+    console.log(event)
+    // TODO: do not allow whitespace or empty name
+  }
+
+  function deleteName(event: MouseEvent) {
+    const deleteButton = event.target as HTMLElement;
+    const itemNode = deleteButton.parentNode;
+    const listNode = itemNode.parentElement;
+    const isUndrawnList = listNode.id.includes('undrawn');
+    const foundNameEl = Object.values(itemNode.children).find((child) => child.tagName === "P");
+    const foundName = foundNameEl.textContent;
+
+    let namesArray = isUndrawnList ? undrawnNames : drawnNames;
+    const nameToDeleteIndex = namesArray.findIndex((name) => name === foundName);
+    namesArray.splice(nameToDeleteIndex, 1);
+    
+    if (isUndrawnList) {
+      updateUndrawnNamesList();
+    } else {
+      updateDrawnNamesList();
+    }
   }
   
   function drawName() {
