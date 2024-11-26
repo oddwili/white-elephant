@@ -82,12 +82,55 @@ const WhiteElephant = (function () {
   }
 
   function editName(event: MouseEvent) {
-    console.log(event)
-    // TODO: do not allow whitespace or empty name
+    const editButton = event.target as HTMLButtonElement;
+    const itemNode = editButton.parentNode;
+    const listNode = itemNode.parentElement;
+    const isUndrawnList = listNode.id.includes('undrawn');
+    const foundNameEl = Object.values(itemNode.children).find((child) => child.tagName === "P");
+    const foundName = foundNameEl.textContent;
+
+    let namesArray = isUndrawnList ? undrawnNames : drawnNames;
+    const editInputElement = document.createElement('input');
+    editInputElement.setAttribute('type', 'text');
+    editInputElement.setAttribute('value', foundName);
+    itemNode.appendChild(editInputElement);
+    const editSaveButton = document.createElement('button');
+    editSaveButton.textContent = 'Save Edit';
+    const cancelEditButton = document.createElement('button');
+    cancelEditButton.textContent = 'Cancel Edit';
+
+    function saveAndCloseEdits() {
+      const newNameValue = editInputElement.value.trim();
+
+      if(newNameValue === '') {
+        console.error('New name value is empty');
+        return;
+      }
+      const nameToUpdateIndex = namesArray.findIndex((name) => name  === foundName);
+      namesArray.splice(nameToUpdateIndex, 1, newNameValue);
+      closeEditing();
+    
+      if (isUndrawnList) {
+        updateUndrawnNamesList();
+      } else {
+        updateDrawnNamesList();
+      }
+    }
+
+    function closeEditing() {
+      itemNode.removeChild(editInputElement);
+      itemNode.removeChild(editSaveButton);
+      itemNode.removeChild(cancelEditButton);
+    }
+
+    editSaveButton.addEventListener('click', saveAndCloseEdits);
+    cancelEditButton.addEventListener('click', closeEditing);
+    itemNode.appendChild(editSaveButton);
+    itemNode.appendChild(cancelEditButton);
   }
 
   function deleteName(event: MouseEvent) {
-    const deleteButton = event.target as HTMLElement;
+    const deleteButton = event.target as HTMLButtonElement;
     const itemNode = deleteButton.parentNode;
     const listNode = itemNode.parentElement;
     const isUndrawnList = listNode.id.includes('undrawn');
