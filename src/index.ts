@@ -192,10 +192,7 @@ const WhiteElephant = (function () {
   }
 
   return {
-    addName: addName,
-    drawName: drawName,
-    setupGame: setupGame,
-    clearCurrentGame,
+    setupGame
   }
 })();
 
