@@ -11,27 +11,33 @@
 </head>
 
 <body>
-  <main class="container">
-  <h1>Name Drawing App</h1>
-
-  <div>
+  <header>
+    <h1>Name Drawing App</h1>
     <input type="text" id="add-name-input" placeholder="Enter a name">
     <button class="button" id="add-name-button">Add Name</button>
+  </header>
+  <main class="container-fluid main-container">
+    <div class="grid">
+      
+    <section class="undrawn">
+      <h3>Undrawn Names:</h3>
+      <ul id="undrawn-names-list"></ul>
+
+      <button class="button" id="draw-button">Draw Name</button>
+    </section>
+
+    <section id="draw-area">
+      <p id="result"></p>
+    </section>
+
+    <section class="drawn">
+      <h3>Drawn Names:</h3>
+      <ol id="drawn-names-list"></ol>
+
+      <button class="button" id="clear-button">Clear Current Game</button>
+
+    </section>
   </div>
-  <h3>Undrawn Names:</h3>
-  <ul id="undrawn-names-list"></ul>
-
-  <button class="button" id="draw-button">Draw Name</button>
-
-  <div id="draw-area">
-    <p id="result"></p>
-  </div>
-
-  <h3>Drawn Names:</h3>
-  <ol id="drawn-names-list"></ol>
-
-  <button class="button" id="clear-button">Clear Current Game</button>
-
   </main>
   <script src="./bundle.js"></script>
 </body>
