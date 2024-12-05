@@ -18,3 +18,13 @@
 .name-list-item {
   display: flex;
 }
+
+.delete-button,
+.edit-button {
+  display: none;
+}
+
+.name-list-item:hover .edit-button,
+.name-list-item:hover .delete-button {
+  display: block;
+}
