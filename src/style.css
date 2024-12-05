@@ -8,3 +8,13 @@
   max-width: 70vw;
   width: 100%;
 }
+
+.edit-svg,
+.delete-svg {
+  height: 100px;
+  width: 100px;
+}
+
+.name-list-item {
+  display: flex;
+}
