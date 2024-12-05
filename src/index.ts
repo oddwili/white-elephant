@@ -66,14 +66,26 @@ const WhiteElephant = (function () {
   function generateNameListItem(names, listElement) {
     names.forEach((name, index) => {
       const li = document.createElement('li');
+      li.classList.add('name-list-item')
       const text = document.createElement('p');
       text.textContent = name;
+
       const editButton = document.createElement('button');
       editButton.addEventListener('click', editName);
-      editButton.textContent = 'edit';
+      const editSVG = document.createElement("object");
+      editSVG.setAttribute('type', 'image/svg+xml');
+      editSVG.setAttribute('data', './assets/erase.svg');
+      editSVG.classList.add('edit-svg');
+      editButton.appendChild(editSVG);
+
       const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'delete';
       deleteButton.addEventListener('click', deleteName);
+      const deleteSVG = document.createElement("object");
+      deleteSVG.setAttribute('type', 'image/svg+xml');
+      deleteSVG.setAttribute('data', './assets/trash.svg');
+      deleteSVG.classList.add('delete-svg');
+      deleteButton.appendChild(deleteSVG);
+
       li.appendChild(editButton);
       li.appendChild(text);
       li.appendChild(deleteButton);
