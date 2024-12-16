@@ -76,16 +76,24 @@ const WhiteElephant = (function () {
 
       const editButton = document.createElement("button");
       editButton.addEventListener("click", editName);
-      editButton.classList.add("edit-button");
+      editButton.classList.add("clear-button-styles", "edit-button");
       const editSVG = document.createElement("object");
       editSVG.setAttribute("type", "image/svg+xml");
       editSVG.setAttribute("data", "./assets/erase.svg");
+      // const editSVG = document.createElementNS(
+      //   "http://www.w3.org/2000/svg",
+      //   "svg",
+      // );
       editSVG.classList.add("edit-svg");
       editButton.appendChild(editSVG);
+      // var obj = document.createElement('object');
+      // obj.data = URL.createObjectURL(file);
+      // obj.onload = e => URL.revokeObjectURL(obj.data);
+      // document.body.appendChild(obj);
 
       const deleteButton = document.createElement("button");
       deleteButton.addEventListener("click", deleteName);
-      deleteButton.classList.add("delete-button");
+      deleteButton.classList.add("clear-button-styles", "delete-button");
       const deleteSVG = document.createElement("object");
       deleteSVG.setAttribute("type", "image/svg+xml");
       deleteSVG.setAttribute("data", "./assets/trash.svg");
